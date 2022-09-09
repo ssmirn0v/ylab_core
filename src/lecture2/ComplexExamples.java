@@ -102,6 +102,20 @@ public class ComplexExamples {
 
         Map<String, Long> collect = task1(RAW_DATA);
         System.out.println(collect);
+
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
+        System.out.println("Task 2:");
+        System.out.println();
+        int[] arr = new int[] {3, 4, 2, 7};
+        int target = 10;
+        String res = task2(arr, target).map(Arrays::toString)
+                .orElse("No two numbers, which sum equals target");
+        System.out.println(res);
+
+
+
         /*
         Task1
             Убрать дубликаты, отсортировать по идентификатору, сгруппировать по имени
@@ -145,5 +159,29 @@ public class ComplexExamples {
         return Arrays.stream(data).distinct()
                 .sorted(Comparator.comparing(Person::getId))
                 .collect(groupingBy(Person::getName, Collectors.counting()));
+    }
+
+
+    private static Optional<int[]> task2(int[] arr, int target) {
+        if (arr == null) {
+            return Optional.empty();
+        }
+
+        Set<Integer> set = new HashSet<>();
+
+
+        for (int j : arr) {
+            if (set.contains(target - j)) {
+                return Optional.of(new int[]{target - j, j});
+            }
+
+            if (set.contains(j)) {
+                continue;
+            }
+
+            set.add(j);
+        }
+
+        return Optional.empty();
     }
 }
