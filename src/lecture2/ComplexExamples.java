@@ -99,7 +99,6 @@ public class ComplexExamples {
         System.out.println();
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
-
         Map<String, Long> collect = task1(RAW_DATA);
         System.out.println(collect);
 
@@ -113,6 +112,36 @@ public class ComplexExamples {
         String res = task2(arr, target).map(Arrays::toString)
                 .orElse("No two numbers, which sum equals target");
         System.out.println(res);
+
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
+        System.out.println("Task 3:");
+        System.out.println();
+        System.out.println(fuzzySearch("car", "ca6$$#_rtwheel"));
+        assert fuzzySearch("car", "ca6$$#_rtwheel") == true;
+        System.out.println(fuzzySearch("cwhl", "cartwheel"));
+        assert fuzzySearch("cwhl", "cartwheel") == true;
+        System.out.println(fuzzySearch("cwhee", "cartwheel"));
+        assert fuzzySearch("cwhl", "cartwheel") == true;
+        System.out.println(fuzzySearch("cartwheel", "cartwheel"));
+        assert fuzzySearch("cwhl", "cartwheel") == true;
+        System.out.println(fuzzySearch("cwheeel", "cartwheel"));
+        assert fuzzySearch("cwheeel", "cartwheel") == false;
+        System.out.println(fuzzySearch("lw", "cartwheel"));
+        assert fuzzySearch("lw", "cartwheel") == false;
+        System.out.println(fuzzySearch("ctz", "cartwheelctgwez"));
+        assert fuzzySearch("ctz", "cartwheelctgwez") == true;
+        System.out.println(fuzzySearch("Are", "cartwheel"));
+        assert fuzzySearch("Are", "cartwheel") == false;
+        System.out.println(fuzzySearch("are", "cArtwheel"));
+        assert fuzzySearch("are", "cArtwheel") == false;
+        System.out.println(fuzzySearch(null, "cartwheel"));
+        assert fuzzySearch(null, "cartwheel") == false;
+        System.out.println(fuzzySearch(null, null));
+        assert fuzzySearch(null, null) == false;
+
+
 
 
 
@@ -143,7 +172,7 @@ public class ComplexExamples {
         /*
         Task3
             Реализовать функцию нечеткого поиска
-            
+
                     fuzzySearch("car", "ca6$$#_rtwheel"); // true
                     fuzzySearch("cwhl", "cartwheel"); // true
                     fuzzySearch("cwhee", "cartwheel"); // true
@@ -183,5 +212,23 @@ public class ComplexExamples {
         }
 
         return Optional.empty();
+    }
+
+    private static boolean fuzzySearch(String source, String target) {
+        if (source == null || target == null || source.length() > target.length()) {
+            return false;
+        }
+
+        int lastMatchedPos = 0;
+        for (int i = 0; i < source.length(); i++) {
+            for (; lastMatchedPos < target.length(); lastMatchedPos++) {
+                if (source.charAt(i) == target.charAt(lastMatchedPos)) {
+                    if (i == source.length() - 1) return true;
+                    lastMatchedPos++;
+                    break;
+                }
+            }
+        }
+        return false;
     }
 }
